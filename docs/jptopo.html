@@ -17,8 +17,8 @@
       var scale = 40000;
       d3.json("./japan/japan.topojson", createMap);
 
-      function createMap(topoSaitama) {
-        var geoSaitama = topojson.feature(topoSaitama, topoSaitama.objects[11]);　//TopoJSON=>GeoJSO変換
+      function createMap(topoJapan) {
+        var geoJapan = topojson.feature(topoJapan, topoJapan.objects[11]);　//TopoJSON=>GeoJSO変換
         var aProjection = d3.geoMercator()
             .center([ 139.5, 35.9 ])
             .translate([width/2, height/2])
@@ -27,7 +27,7 @@
         var svg = d3.select("svg").attr("width",width).attr("height",height);
 
         //マップ描画
-        var map = svg.selectAll("path").data(geoSaitama.features)
+        var map = svg.selectAll("path").data(geoJapan.features)
           .enter()
           .append("path")
             .attr("d", geoPath)
