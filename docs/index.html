@@ -3,19 +3,7 @@
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.0/d3.min.js" type="text/JavaScript"></script>
 
-<style>
-html, body {
-  width: 100%;
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-}
-#demoMap{
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}
-</style>
+
 
   </head>
   <body>
@@ -24,13 +12,16 @@ html, body {
 //      var width = 600,height = 600;
     var width = window.parent.screen.width;
     var height = window.parent.screen.height;
+    //. 初期中心位置
+    var lat = 34.6878788;
+    var lng = 135.5060062;
 
       var scale = 1600;
       d3.json("./japan/japan.geojson", createMap);
 
       function createMap(japan) {
         var aProjection = d3.geoMercator()
-            .center([ 136.0, 35.6 ])
+            .center([ lng, lat ])
             .translate([width/2, height/2])
             .scale(scale);
         var geoPath = d3.geoPath().projection(aProjection);

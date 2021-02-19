@@ -12,15 +12,21 @@
   <body>
     <svg></svg>
     <script>
-      var width = 1200,
-          height = 800;
+//      var width = 1200,height = 800;
+      var width = window.parent.screen.width;
+      var height = window.parent.screen.height;
+      //. 初期中心位置
+      var lat = 34.6878788;
+      var lng = 135.5060062;
+
       var scale = 40000;
+
       d3.json("./japan/japan.topojson", createMap);
 
       function createMap(topoJapan) {
         var geoJapan = topojson.feature(topoJapan, topoJapan.objects[11]);　//TopoJSON=>GeoJSO変換
         var aProjection = d3.geoMercator()
-            .center([ 139.5, 35.9 ])
+            .center([ lng, lat ])
             .translate([width/2, height/2])
             .scale(scale);
         var geoPath = d3.geoPath().projection(aProjection);

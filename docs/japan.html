@@ -47,8 +47,13 @@
       変数定義
     -------------------- */
 
-    var width  = 960,
-        height = 500;
+//    var width  = 960,height = 500;
+    var width = window.parent.screen.width;
+    var height = window.parent.screen.height;
+    //. 初期中心位置
+    var lat = 34.6878788;
+    var lng = 135.5060062;
+
     var tip;
 
     /* --------------------
@@ -58,7 +63,7 @@
     /* 地図投影の指定 */
     var projection = d3.geo.mercator()
                     .scale(1000)
-                    .center([139.883565, 36.565725]);
+                    .center([lng, lat]);
 
     /* 地形データをSVGに変換するための入れ物 */
     var path = d3.geo.path()
