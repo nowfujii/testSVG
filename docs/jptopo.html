@@ -1,61 +1,95 @@
-<!doctype html>
-<html>
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.0/d3.min.js" type="text/JavaScript"></script>
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<script src='https://d3js.org/d3.v3.min.js'></script>
+<script src='https://d3js.org/topojson.v1.min.js'></script>
+<title>Yuichi Yazaki 作の日本の topojson。 各 feature の中点に、県名を示すラベルを表示した。 https://gist.github.com/osoken/a43c0a2b5de3b29bc284</title>
+<body>
+<div id='map_canvas' style='position:absolute'></div>
+<script>
 
+var map={};
+map.width = 960;
+map.height = 500;
 
+var lat = 34.6878788;
+var lng = 135.5060062;
+var width = window.innerWidth;  //window.parent.screen.width;
+var height = window.innerHeight;  //window.parent.screen.height;
 
+map.scale = 862.5420350331074;
+map.translate = [-1607.5029017610468, 824.1369223542354];
 
-  </head>
-  <body>
-    <svg></svg>
-    <script>
-//      var width = 1200,height = 800;
-    var width = window.innerWidth;  //window.parent.screen.width;
-    var height = window.innerHeight;  //window.parent.screen.height;
-      //. 初期中心位置
-      var lat = 34.6878788;
-      var lng = 135.5060062;
+map.zoom = d3.behavior.zoom();
 
-      var scale = 40000;
+map.zoomed = function()
+{
+  map.translate = map.zoom.translate();
+  map.scale = map.zoom.scale();
+  map.draw();
+}
 
-      d3.json("./japan/japan.topojson", createMap);
+map.zoom.on('zoom',map.zoomed);
+map.zoom.translate(map.translate);
+map.zoom.scale(map.scale);
 
-      function createMap(topoJapan) {
-        var geoJapan = topojson.feature(topoJapan, topoJapan.objects[11]);　//TopoJSON=>GeoJSO変換
-        var aProjection = d3.geoMercator()
-            .center([ lng, lat ])
-            .translate([width/2, height/2])
-            .scale(scale);
-        var geoPath = d3.geoPath().projection(aProjection);
-        var svg = d3.select("svg").attr("width",width).attr("height",height);
+map.canvas = d3.select('#map_canvas')
+  .append('svg')
+  .attr('width', map.width)
+  .attr('height',map.height)
+  .call(map.zoom);
 
-        //マップ描画
-        var map = svg.selectAll("path").data(geoJapan.features)
-          .enter()
-          .append("path")
-            .attr("d", geoPath)
-            .style("stroke", "#ffffff")
-            .style("stroke-width", 0.1)
-            .style("fill", "#5EAFC6");
+map.draw = function()
+{
+  map.projection.scale(map.scale);
+  map.projection.translate(map.translate);
+  map.canvas.selectAll('path')
+    .attr('d',map.path);
+  map.prefectures.forEach(function(d)
+  {
+    d.centroid = map.path.centroid(d);
+  });
+  map.canvas.selectAll('text')
+    .style('font-size', (map.scale*0.004))
+    .attr('x', function(d){return d.centroid[0];})
+    .attr('y', function(d){return d.centroid[1];});
+}
 
-        //ズームイベント設定
-        var zoom = d3.zoom().on('zoom', function(){
-            aProjection.scale(scale * d3.event.transform.k);
-            map.attr('d', geoPath);
-        });
-        svg.call(zoom);
-
-        //ドラッグイベント設定
-        var drag = d3.drag().on('drag', function(){
-            var tl = aProjection.translate();
-            aProjection.translate([tl[0] + d3.event.dx, tl[1] + d3.event.dy]);
-            map.attr('d', geoPath);
-        });
-        map.call(drag);
-      }
-    </script>
-  </body>
-</html>
+d3.json('/osoken/raw/b8e5859295757bb2ec5b/japan.topojson',function(error,data)
+{
+  if (error)
+  {
+    console.log(error);
+    return;
+  }
+  map.canvas.append('rect')
+    .attr('x',0).attr('y',0).attr('height',map.height).attr('width',map.width).attr('fill','#F8F8F8');
+  map.prefectures = topojson.feature(data, data.objects.japan).features;
+  map.projection = d3.geo.mercator()
+    .scale(map.scale)
+    .translate(map.translate);
+  map.path = d3.geo.path().projection(map.projection);
+  map.prefectures.forEach(function(d)
+  {
+    d.centroid = map.path.centroid(d);
+  });
+  map.layer = map.canvas.append('g')
+      .attr('class', 'prefectures');
+  map.layer.selectAll('path')
+      .data(map.prefectures)
+    .enter().append('path')
+      .style('fill', '#ccc')
+      .style('stroke', '#888')
+      .style('stroke-width', '1.2px')
+      .attr('d', map.path);
+  map.layer.selectAll('text')
+      .data(map.prefectures)
+    .enter().append('text')
+      .attr('x', function(d){return d.centroid[0];})
+      .attr('y', function(d){return d.centroid[1];})
+      .attr('text-anchor', 'middle')
+      .style('font-family', 'sans-serif')
+      .style('font-size', (map.scale*0.004))
+      .text(function(d){return d.properties.nam_ja;});
+  map.draw();
+});
+</script>
