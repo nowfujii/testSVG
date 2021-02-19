@@ -71,7 +71,7 @@ d3.json('./japan/tokyo.topojson',function(error,data)
   }
   map.canvas.append('rect')
     .attr('x',0).attr('y',0).attr('height',map.height).attr('width',map.width).attr('fill','#F8F8F8');
-  map.prefectures = topojson.feature(data, data.objects.japan).features;
+  map.prefectures = topojson.feature(data, data.objects.tokyo).features;
   map.projection = d3.geo.mercator()
     .scale(map.scale)
     .translate(map.translate);
