@@ -9,7 +9,7 @@
       var width = 600,
           height = 600;
       var scale = 1600;
-      d3.json("./japan.geojson", createMap);
+      d3.json("./japan/japan.geojson", createMap);
 
       function createMap(japan) {
         var aProjection = d3.geoMercator()
