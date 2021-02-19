@@ -54,7 +54,7 @@ map.draw = function()
     .attr('y', function(d){return d.centroid[1];});
 }
 
-d3.json('/osoken/raw/b8e5859295757bb2ec5b/japan.topojson',function(error,data)
+d3.json('./japan/japan.topojson',function(error,data)
 {
   if (error)
   {
