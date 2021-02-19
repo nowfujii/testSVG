@@ -10,7 +10,7 @@
       var width = 1200,
           height = 800;
       var scale = 40000;
-      d3.json("./japan/saitama.topojson", createMap);
+      d3.json("./japan/japan.topojson", createMap);
 
       function createMap(topoSaitama) {
         var geoSaitama = topojson.feature(topoSaitama, topoSaitama.objects[11]);　//TopoJSON=>GeoJSO変換
