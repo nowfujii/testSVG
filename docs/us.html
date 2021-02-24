@@ -1,0 +1,14 @@
+<script src="us-states.js"></script>
+
+<script type="text/javascript">
+  //地図の中心地を定義
+  var mymap = L.map('mapid').setView([37.8, -96], 4);
+
+  //タイルレイヤーを取得
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    maxZoom: 18}).addTo(mymap);
+
+  //"https://leafletjs.com/examples/choropleth/us-states.js"
+  L.geoJson(statesData).addTo(mymap);
+</script>
