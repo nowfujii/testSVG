@@ -53,6 +53,36 @@
     };
   }
 
+  function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+  }
+
+  function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+  }
+
+  function zoomToFeature(e) {
+    mymap.fitBounds(e.target.getBounds());
+  }
+
+  function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+  }
 
   //地図の中心地を定義
   var mymap = L.map('mapid').setView([37.8, -96], 4);
@@ -63,6 +93,11 @@
     maxZoom: 18}).addTo(mymap);
 
   //"https://leafletjs.com/examples/choropleth/us-states.js"
-  L.geoJson(statesData, {style: style}).addTo(mymap);
+//  L.geoJson(statesData, {style: style}).addTo(mymap);
+
+  geojson = L.geoJson(statesData, {
+      style: style,
+      onEachFeature: onEachFeature
+  }).addTo(mymap);
 
 </script>
