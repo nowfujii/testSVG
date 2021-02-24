@@ -24,7 +24,7 @@ var height = window.innerHeight;  //window.parent.screen.height;
 
 
 //. 初期ズームレベル
-var zoomlevel = 10;
+var zoomlevel = 6;
 
 var map = null;
 
@@ -50,7 +50,7 @@ $(function(){
             type: 'Feature',
             geometry: geojson.geometry
           }];
-          var option = {  //. なるべく透明に近いスタイルで
+          var option = {
             // 黒枠白塗りスタイル
             color: '#000',
             fillColor: '#fff',
@@ -58,21 +58,19 @@ $(function(){
             opacity: 1,
             fillOpacity: 1
           }
+          var option2 = {
+            // 黒枠赤塗りスタイル
+            color: '#000',
+            fillColor: '#111',
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 1
+          }
+
           L.geoJson( feature, {
-            var option = {
-                // 黒枠白塗りスタイル
-                color: '#fff',
-                fillColor: '#000',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 1
-            }
-            style: option,
+            style: option2,
             onEachFeature: function( feature, layer ){
               layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
-
-
-
             }
           } ).addTo( map );
         });
