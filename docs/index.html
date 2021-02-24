@@ -72,8 +72,8 @@
 
   info.update = function (props) {
     this._div.innerHTML = '<h4>JP</h4>' +  (props ?
-    '<b>' + props.nam_ja + '</b><br />' + props.id +
-    : '都道府県をクリックすると中心拡大し、都道府県名を表示します。');
+    '<b>' + props.nam_ja + '</b><br />' + props.id + ' people / mi<sup>2</sup>'
+    : 'Hover over a state');
   };
 
   info.addTo(map);
@@ -101,6 +101,7 @@
         weight: 1,
         opacity: 1,
         fillOpacity: 1
+
     };
   }
 
@@ -156,8 +157,7 @@
   }).addTo(map);
 
 //  map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
-/*
-  var legend = L.control({position: 'bottomright'});
+/*  var legend = L.control({position: 'bottomright'});
 
   legend.onAdd = function (map) {
 
