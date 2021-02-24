@@ -41,7 +41,7 @@ $(function(){
 
   //. 47 都道府県の GeoJSON データを取得
   $.ajax({
-    url: './japan.geojson',
+    url: './japan/japan.geojson',
     type: 'GET',
     success: function( result ){
       if( result && result.features ){
@@ -52,11 +52,17 @@ $(function(){
             geometry: geojson.geometry
           }];
           var option = {  //. なるべく透明に近いスタイルで
-            color: '#fff',
+//            color: '#fff',
+//            fillColor: '#fff',
+//            weight: 1,
+//            opacity: 0.01,
+//            fillOpacity: 0.01
+            // 黒枠白塗りスタイル
+            color: '#000',
             fillColor: '#fff',
             weight: 1,
-            opacity: 0.01,
-            fillOpacity: 0.01
+            opacity: 1,
+            fillOpacity: 1
           }
           L.geoJson( feature, {
             style: option,
