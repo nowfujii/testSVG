@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.0/d3.min.js" type="text/JavaScript"></script>
+
+
+
+  </head>
+  <body>
+    <svg></svg>
+    <script>
+//      var width = 600,height = 600;
+    var width = window.innerWidth;  //window.parent.screen.width;
+    var height = window.innerHeight;  //window.parent.screen.height;
+    //. 初期中心位置
+    var lat = 34.6878788;
+    var lng = 135.5060062;
+
+      var scale = 1600;
+      d3.json("./japan/japan.geojson", createMap);
+
+      function createMap(japan) {
+        var aProjection = d3.geoMercator()
+            .center([ lng, lat ])
+            .translate([width/2, height/2])
+            .scale(scale);
+        var geoPath = d3.geoPath().projection(aProjection);
+        var svg = d3.select("svg").attr("width",width).attr("height",height);
+
+        var map = svg.selectAll("path").data(japan.features)
+          .enter()
+          .append("path")
+            .attr("d", geoPath)
+            .style("stroke", "#ffffff")
+            .style("stroke-width", 0.1)
+            .style("fill", "#5EAFC6");
+
+        //ズームイベント設定
+        var zoom = d3.zoom().on('zoom', function(){
+            aProjection.scale(scale * d3.event.transform.k);
+            map.attr('d', geoPath);
+        });
+        svg.call(zoom);
+
+        //ドラッグイベント設定
+        var drag = d3.drag().on('drag', function(){
+            var tl = aProjection.translate();
+            aProjection.translate([tl[0] + d3.event.dx, tl[1] + d3.event.dy]);
+            map.attr('d', geoPath);
+        });
+        map.call(drag);
+      }
+/*******************************
+https://shimz.me/blog/d3-js/3025
+https://github.com/niiyz/JapanCityGeoJson
+https://github.com/d3/d3-geo/blob/master/README.md#projection_translate
+https://bl.ocks.org/mbostock/22994cc97fefaeede0d861e6815a847e
+********************************/
+    </script>
+  </body>
+</html>
+
