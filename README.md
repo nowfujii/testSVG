@@ -1,6 +1,6 @@
 # testSVG
 SVGによる日本地図表示テスト<br>
-https://nowfujii.github.io/testSVG/us.html<br>
+https://nowfujii.github.io/testSVG/jp.html<br>
 https://nowfujii.github.io/testSVG/jpmap.html<br>
 <br>
 https://nowfujii.github.io/testSVG/index.html<br>
