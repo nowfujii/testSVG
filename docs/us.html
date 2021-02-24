@@ -41,34 +41,33 @@
 
 <script type="text/javascript">
 
-	var map = L.map('map').setView([37.8, -96], 4);
+  var map = L.map('map').setView([37.8, -96], 4);
 
-	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/light-v9',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(map);
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/light-v9',
+    tileSize: 512,
+    zoomOffset: -1
+  }).addTo(map);
 
 
-	// control that shows state info on hover
-	var info = L.control();
+  // control that shows state info on hover
+  var info = L.control();
 
-	info.onAdd = function (map) {
-		this._div = L.DomUtil.create('div', 'info');
-		this.update();
-		return this._div;
-	};
+  info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info');
+    this.update();
+    return this._div;
+  };
 
-	info.update = function (props) {
-		this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-			'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-			: 'Hover over a state');
-	};
+  info.update = function (props) {
+    this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+    '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+    : 'Hover over a state');
+  };
 
-	info.addTo(map);
+  info.addTo(map);
 
 //色をつける
 //色や不透明度などを変更するにはL.geoJson()の第2引数にstyleを含むオプションを与えますが、
