@@ -22,24 +22,26 @@ var lng = 135.5060062;
 var width = window.innerWidth;  //window.parent.screen.width;
 var height = window.innerHeight;  //window.parent.screen.height;
 
+
 //. 初期ズームレベル
 var zoomlevel = 10;
 
 var map = null;
 
 $(function(){
-  //leafletを準備
-  map = L.map('Map', { dragging: true, zoomControl: true }).setView( [ lat, lng ], zoomlevel );
+  //. 初期位置を中心とした地図を OpenStreetMap データで表示
+  map = L.map('demoMap', { dragging: true, zoomControl: true }).setView( [ lat, lng ], zoomlevel );
 
-//. 初期位置を中心とした地図を OpenStreetMap データで表示
+  //. ここから下の JavaScript を全てコメントにしても #1 のエラーが発生する
   L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',}
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',
+    }
   ).addTo( map );
 
   //. 47 都道府県の GeoJSON データを取得
   $.ajax({
-    url: './japan/japan.geojson',
+    url: './japan.geojson',
     type: 'GET',
     success: function( result ){
       if( result && result.features ){
@@ -49,22 +51,13 @@ $(function(){
             type: 'Feature',
             geometry: geojson.geometry
           }];
-          var option = {
-//. 透明に近いスタイルで
-//            color: '#fff',
-//            fillColor: '#fff',
-//            weight: 1,
-//            opacity: 0.01,
-//            fillOpacity: 0.01
-
-            // 黒枠白塗りスタイル
-            color: '#000',
+          var option = {  //. なるべく透明に近いスタイルで
+            color: '#fff',
             fillColor: '#fff',
             weight: 1,
-            opacity: 1,
-            fillOpacity: 1
+            opacity: 0.01,
+            fillOpacity: 0.01
           }
-          //タッチした時のポップアップ表示
           L.geoJson( feature, {
             style: option,
             onEachFeature: function( feature, layer ){
@@ -97,7 +90,7 @@ html, body {
 </head>
 <body>
   <div>
-    <div id="Map"></div>
+    <div id="demoMap"></div>
   </div>
 </body>
 </html>
