@@ -32,10 +32,10 @@ $(function(){
   map = L.map('Map', { dragging: true, zoomControl: true }).setView( [ lat, lng ], zoomlevel );
 
 //. 初期位置を中心とした地図を OpenStreetMap データで表示
-//  L.tileLayer(
-//    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//        {attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',}
-//  ).addTo( map );
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',}
+  ).addTo( map );
 
   //. 47 都道府県の GeoJSON データを取得
   $.ajax({
