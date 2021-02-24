@@ -58,7 +58,7 @@ $(function(){
             opacity: 1,
             fillOpacity: 1
           }
-          var option2 = {
+/*          var option2 = {
             // 黒枠赤塗りスタイル
             color: '#000',
             fillColor: '#f00',
@@ -66,9 +66,9 @@ $(function(){
             opacity: 1,
             fillOpacity: 1
           }
-
+*/
           L.geoJson( feature, {
-            style: option2,
+            style: option,
             onEachFeature: function( feature, layer ){
               layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
             }
