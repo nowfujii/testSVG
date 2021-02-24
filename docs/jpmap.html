@@ -59,18 +59,19 @@ $(function(){
             fillOpacity: 1
           }
           L.geoJson( feature, {
-            style: option,
-            onEachFeature: function( feature, layer ){
-              layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
-
-              var option = {
+            var option = {
                 // 黒枠白塗りスタイル
                 color: '#fff',
                 fillColor: '#000',
                 weight: 1,
                 opacity: 1,
                 fillOpacity: 1
-              }
+            }
+            style: option,
+            onEachFeature: function( feature, layer ){
+              layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
+
+
 
             }
           } ).addTo( map );
