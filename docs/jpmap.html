@@ -32,12 +32,10 @@ $(function(){
   map = L.map('Map', { dragging: true, zoomControl: true }).setView( [ lat, lng ], zoomlevel );
 
 //. 初期位置を中心とした地図を OpenStreetMap データで表示
-  L.tileLayer(
+//  L.tileLayer(
 //    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 //        {attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',}
-    'http://cyberjapandata.gsi.go.jp/xyz/blank/${z}/${x}/${y}.png',
-//        {attribution: 'Map data &copy; <a href="//cyberjapandata.gsi.go.jp/">国土地理院</a>',}
-  ).addTo( map );
+//  ).addTo( map );
 
   //. 47 都道府県の GeoJSON データを取得
   $.ajax({
@@ -52,20 +50,21 @@ $(function(){
             geometry: geojson.geometry
           }];
           var option = {
-//. なるべく透明に近いスタイルで
+//. 透明に近いスタイルで
 //            color: '#fff',
 //            fillColor: '#fff',
 //            weight: 1,
 //            opacity: 0.01,
 //            fillOpacity: 0.01
 
-            //黒枠白塗りスタイル
+            // 黒枠白塗りスタイル
             color: '#000',
             fillColor: '#fff',
             weight: 1,
             opacity: 1,
             fillOpacity: 1
           }
+          //タッチした時のポップアップ表示
           L.geoJson( feature, {
             style: option,
             onEachFeature: function( feature, layer ){
