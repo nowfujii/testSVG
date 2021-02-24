@@ -29,8 +29,41 @@
 
 
 <script src="us-states.js"></script>
-
 <script type="text/javascript">
+
+	var map = L.map('map').setView([37.8, -96], 4);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/light-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(map);
+
+
+	// control that shows state info on hover
+	var info = L.control();
+
+	info.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'info');
+		this.update();
+		return this._div;
+	};
+
+	info.update = function (props) {
+		this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+			'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+			: 'Hover over a state');
+	};
+
+	info.addTo(map);
+
+//色をつける
+//色や不透明度などを変更するにはL.geoJson()の第2引数にstyleを含むオプションを与えますが、
+//ここに関数を書くことでgeoJSONの各feature内の値を参照して色を付けることが出来ます。
+//以下ではfeature.properties.densityをfillColor()に渡して値を色に変換しています。
   function getColor(d) {
     return d > 1000 ? '#800026' :
             d > 500  ? '#BD0026' :
@@ -53,6 +86,13 @@
     };
   }
 
+
+//インタラクションを追加
+// ポリゴン上にマウスオーバーしたときのハイライト、
+// マウスを外したときに元に戻す、
+// クリックしたらズームする、
+//という3つのインタラクションを追加します。
+//それぞれstyleを変更するfunctionを書いておいてイベント発生時にonEachFeatureに呼び出してもらいます。
   function highlightFeature(e) {
     var layer = e.target;
 
@@ -66,10 +106,15 @@
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
+
+    info.update(layer.feature.properties);
   }
+
+  var geojson;
 
   function resetHighlight(e) {
     geojson.resetStyle(e.target);
+    info.update();
   }
 
   function zoomToFeature(e) {
@@ -84,20 +129,37 @@
     });
   }
 
-  //地図の中心地を定義
-  var mymap = L.map('mapid').setView([37.8, -96], 4);
-
-  //タイルレイヤーを取得
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
-    maxZoom: 18}).addTo(mymap);
-
-  //"https://leafletjs.com/examples/choropleth/us-states.js"
-//  L.geoJson(statesData, {style: style}).addTo(mymap);
-
+  //geoJSONを表示する
   geojson = L.geoJson(statesData, {
-      style: style,
-      onEachFeature: onEachFeature
-  }).addTo(mymap);
+    style: style,
+    onEachFeature: onEachFeature
+  }).addTo(map);
+
+  map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
+  var legend = L.control({position: 'bottomright'});
+
+  legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+      grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+      labels = [],
+      from, to;
+
+      for (var i = 0; i < grades.length; i++) {
+        from = grades[i];
+        to = grades[i + 1];
+
+        labels.push(
+          '<i style="background:' + getColor(from + 1) + '"></i> ' +
+          from + (to ? '&ndash;' + to : '+'));
+      }
+
+      div.innerHTML = labels.join('<br>');
+      return div;
+    };
+
+    legend.addTo(map);
+
+
 
 </script>
