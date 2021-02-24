@@ -32,16 +32,12 @@ function highlightFeature(e) {
   var layer = e.target;
 
   layer.setStyle({
-/*        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-*/
-       // 黒枠赤塗りスタイル
-      color: '#000',
-      fillColor: '#f00',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 1
+    // 黒枠赤塗りスタイル
+    color: '#000',
+    fillColor: '#f00',
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 1
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -54,7 +50,7 @@ function resetHighlight(e) {
 }
 
 function zoomToFeature(e) {
-  mymap.fitBounds(e.target.getBounds());
+  map.fitBounds(e.target.getBounds());
 }
 
 $(function(){
@@ -75,6 +71,7 @@ $(function(){
     success: function( result ){
       if( result && result.features ){
         var jsons = result.features;
+
         jsons.forEach( function( geojson ){
           var feature = [{
             type: 'Feature',
