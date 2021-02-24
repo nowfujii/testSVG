@@ -68,6 +68,16 @@ $(function(){
             style: option,
             onEachFeature: function( feature, layer ){
               layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
+
+              var option = {  //. なるべく透明に近いスタイルで
+                // 黒枠白塗りスタイル
+                color: '#000',
+                fillColor: '#111',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 1
+              }
+
             }
           } ).addTo( map );
         });
