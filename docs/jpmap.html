@@ -28,10 +28,40 @@ var zoomlevel = 4;
 
 var map = null;
 
+function highlightFeature(e) {
+  var layer = e.target;
+
+  layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+       // 黒枠赤塗りスタイル
+      color: '#000',
+      fillColor: '#f00',
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 1
+  });
+
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
+  }
+}
+
+function resetHighlight(e) {
+  geojson.resetStyle(e.target);
+}
+
+function zoomToFeature(e) {
+  mymap.fitBounds(e.target.getBounds());
+}
+
 $(function(){
   //. 初期位置を中心とした地図を OpenStreetMap データで表示
   map = L.map('demoMap', { dragging: true, zoomControl: true }).setView( [ lat, lng ], zoomlevel );
 
+//地図を表示（OpenStreetMap）
 //  L.tileLayer(
 //    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //      attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',
@@ -58,21 +88,19 @@ $(function(){
             opacity: 1,
             fillOpacity: 1
           }
-/*          var option2 = {
-            // 黒枠赤塗りスタイル
-            color: '#000',
-            fillColor: '#f00',
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 1
-          }
-*/
+
           L.geoJson( feature, {
             style: option,
             onEachFeature: function( feature, layer ){
               layer.bindPopup( geojson.properties.id + ' : ' + geojson.properties.nam_ja );
+              layer.on({
+                mouseover:highlightFeature,
+                mouseout:resetHightlight,
+                click:zoomToFeature
+              });
             }
           } ).addTo( map );
+
         });
       }else{
       }
