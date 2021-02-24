@@ -23,7 +23,7 @@ var width = window.innerWidth;  //window.parent.screen.width;
 var height = window.innerHeight;  //window.parent.screen.height;
 
 //. 初期ズームレベル
-var zoomlevel = 10;
+var zoomlevel = 14;
 
 var map = null;
 
@@ -35,7 +35,7 @@ $(function(){
   L.tileLayer(
 //    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 //        {attribution: 'Map data &copy; <a href="//openstreetmap.org/">OpenStreetMap</a>',}
-    'https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png',
+    'http://cyberjapandata.gsi.go.jp/xyz/blank/${z}/${x}/${y}.png',
 //        {attribution: 'Map data &copy; <a href="//cyberjapandata.gsi.go.jp/">国土地理院</a>',}
   ).addTo( map );
 
