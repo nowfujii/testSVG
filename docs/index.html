@@ -72,8 +72,8 @@
 
   info.update = function (props) {
     this._div.innerHTML = '<h4>JP</h4>' +  (props ?
-    '<b>' + props.nam_ja + '</b><br />' + props.id + ' people / mi<sup>2</sup>'
-    : 'Hover over a state');
+    '<b>' + props.nam_ja + '</b><br />' + props.id +
+    : '都道府県をクリックすると中心拡大し、都道府県名を表示します。');
   };
 
   info.addTo(map);
@@ -95,21 +95,12 @@
 
   function style(feature) {
     return {
-/*        fillColor: getColor(feature.properties.density),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7,
-        fillColor: getColor(feature.properties.density)
-*/
         // 黒枠白塗りスタイル
         color: '#000',
         fillColor: '#fff',
         weight: 1,
         opacity: 1,
         fillOpacity: 1
-
     };
   }
 
@@ -124,11 +115,6 @@
     var layer = e.target;
 
     layer.setStyle({
-/*        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-*/
         // 黒枠赤塗りスタイル
         color: '#000',
         fillColor: '#f00',
@@ -170,6 +156,7 @@
   }).addTo(map);
 
 //  map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
+/*
   var legend = L.control({position: 'bottomright'});
 
   legend.onAdd = function (map) {
@@ -193,7 +180,7 @@
     };
 
     legend.addTo(map);
-
+*/
 
 
 </script>
