@@ -6,168 +6,27 @@
   </head>
 
 <!-- leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <!-- ICON plugin -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 
 <!-- easy button-->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
-<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
 
-  <!-- 日本地図GeoJson/　都道府県データpref-->
-  <!-- <script src="japan.js"></script>-->
-  <script src="https://nowfujii.github.io/testSVG/japan.js"></script>
-
-  <!--  <script src="pref.js" ></script>-->
-<script>
-var prefJson = {
-  "marker":[
-    {"id": 1, "pref":"北海道",   "city":"札幌市",     "localGroup":"北海道地方", "prefyomi":"ほっかいどう", "cityyomi":"さっぽろし",   "LGyomi":"ほっかいどうちほう", "url":"http://www.pref.hokkaido.lg.jp/",    "addr":"北海道札幌市中央区北3条西6丁目",             "lat":43.064301, "lng":141.346874},
-    {"id": 2, "pref":"青森県",   "city":"青森市",     "localGroup":"東北地方",   "prefyomi":"あおもりけん", "cityyomi":"あおもりし",   "LGyomi":"とうほくちほう",     "url":"http://www.pref.aomori.lg.jp/",      "addr":"青森県青森市長島一丁目1-1",                  "lat":40.824622, "lng":140.740598},
-    {"id": 3, "pref":"岩手県",   "city":"盛岡市",     "localGroup":"東北地方",   "prefyomi":"いわてけん",   "cityyomi":"もりおかし",   "LGyomi":"とうほくちほう",     "url":"http://www.pref.iwate.jp/",          "addr":"岩手県盛岡市内丸10番1号",                    "lat":39.7036,   "lng":141.152709},
-    {"id": 4, "pref":"宮城県",   "city":"仙台市",     "localGroup":"東北地方",   "prefyomi":"みやぎけん",   "cityyomi":"せんだいし",   "LGyomi":"とうほくちほう",     "url":"http://www.pref.miyagi.jp/",         "addr":"宮城県仙台市青葉区本町3丁目8番1号",          "lat":38.268812, "lng":140.872082},
-    {"id": 5, "pref":"秋田県",   "city":"秋田市",     "localGroup":"東北地方",   "prefyomi":"あきたけん",   "cityyomi":"あきたし",     "LGyomi":"とうほくちほう",     "url":"http://www.pref.akita.lg.jp/",       "addr":"秋田県秋田市山王四丁目1-1",                  "lat":39.718611, "lng":140.102401},
-    {"id": 6, "pref":"山形県",   "city":"山形市",     "localGroup":"東北地方",   "prefyomi":"やまがたけん", "cityyomi":"やまがたし",   "LGyomi":"とうほくちほう",     "url":"http://www.pref.yamagata.jp/",       "addr":"山形県山形市松波二丁目8-1",                  "lat":38.240422, "lng":140.363592},
-    {"id": 7, "pref":"福島県",   "city":"福島市",     "localGroup":"東北地方",   "prefyomi":"ふくしまけん", "cityyomi":"ふくしまし",   "LGyomi":"とうほくちほう",     "url":"http://www.pref.fukushima.jp/",      "addr":"福島県福島市杉妻町2-16",                     "lat":37.750301, "lng":140.467522},
-    {"id": 8, "pref":"茨城県",   "city":"水戸市",     "localGroup":"関東地方",   "prefyomi":"いばらきけん", "cityyomi":"みとし",       "LGyomi":"かんとうちほう",     "url":"http://www.pref.ibaraki.jp/",        "addr":"茨城県水戸市笠原町978番6",                   "lat":36.341793, "lng":140.446802},
-    {"id": 9, "pref":"栃木県",   "city":"宇都宮市",   "localGroup":"関東地方",   "prefyomi":"とちぎけん",   "cityyomi":"うつのみやし", "LGyomi":"かんとうちほう",     "url":"http://www.pref.tochigi.jp/",        "addr":"栃木県宇都宮市塙田1-1-20",                   "lat":36.566672, "lng":139.883093},
-    {"id":10, "pref":"群馬県",   "city":"前橋市",     "localGroup":"関東地方",   "prefyomi":"ぐんまけん",   "cityyomi":"まえばしし",   "LGyomi":"かんとうちほう",     "url":"http://www.pref.gunma.jp/",          "addr":"群馬県前橋市大手町1-1-1",                    "lat":36.390698, "lng":139.060451},
-    {"id":11, "pref":"埼玉県",   "city":"さいたま市", "localGroup":"関東地方",   "prefyomi":"さいたまけん", "cityyomi":"さいたまし",   "LGyomi":"かんとうちほう",     "url":"http://www.pref.saitama.lg.jp/",     "addr":"埼玉県さいたま市浦和区高砂3-15-1",           "lat":35.857431, "lng":139.648901},
-    {"id":12, "pref":"千葉県",   "city":"千葉市",     "localGroup":"関東地方",   "prefyomi":"ちばけん",     "cityyomi":"ちばし",       "LGyomi":"かんとうちほう",     "url":"http://www.pref.chiba.jp/",          "addr":"千葉県千葉市中央区市場町1-1",                "lat":35.605045, "lng":140.123325},
-    {"id":13, "pref":"東京都",   "city":"新宿区",     "localGroup":"関東地方",   "prefyomi":"とうきょうと", "cityyomi":"しんじゅくく", "LGyomi":"かんとうちほう",     "url":"http://www.metro.tokyo.jp/",         "addr":"東京都新宿区西新宿2-8-1",                    "lat":35.689753, "lng":139.691731},
-    {"id":14, "pref":"神奈川県", "city":"横浜市",     "localGroup":"関東地方",   "prefyomi":"かながわけん", "cityyomi":"よこはまし",   "LGyomi":"かんとうちほう",     "url":"http://www.pref.kanagawa.jp/",       "addr":"神奈川県横浜市中区日本大通1",                "lat":35.447495, "lng":139.6424},
-    {"id":15, "pref":"新潟県",   "city":"新潟市",     "localGroup":"中部地方",   "prefyomi":"にいがたけん", "cityyomi":"にいがたし",   "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.niigata.jp/",        "addr":"新潟県新潟市中央区新光町4番地1",             "lat":37.902419, "lng":139.023225},
-    {"id":16, "pref":"富山県",   "city":"富山市",     "localGroup":"中部地方",   "prefyomi":"とやまけん",   "cityyomi":"とやまし",     "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.toyama.jp/",         "addr":"富山県富山市新総曲輪1番7号",                 "lat":36.695275, "lng":137.211342},
-    {"id":17, "pref":"石川県",   "city":"金沢市",     "localGroup":"中部地方",   "prefyomi":"いしかわけん", "cityyomi":"かなざわし",   "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.ishikawa.jp/",       "addr":"石川県金沢市鞍月1丁目1番地",                 "lat":36.59473,  "lng":136.625582},
-    {"id":18, "pref":"福井県",   "city":"福井市",     "localGroup":"中部地方",   "prefyomi":"ふくいけん",   "cityyomi":"ふくいし",     "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.fukui.jp/",          "addr":"福井県福井市大手3-17-1",                     "lat":36.065219, "lng":136.221682},
-    {"id":19, "pref":"山梨県",   "city":"甲府市",     "localGroup":"中部地方",   "prefyomi":"やまなしけん", "cityyomi":"こうふし",     "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.yamanashi.jp/pref/", "addr":"山梨県甲府市丸の内1-6-1",                    "lat":35.664161, "lng":138.568459},
-    {"id":20, "pref":"長野県",   "city":"長野市",     "localGroup":"中部地方",   "prefyomi":"ながのけん",   "cityyomi":"ながのし",     "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.nagano.jp/",         "addr":"長野県長野市大字南長野字幅下692-2",          "lat":36.651296, "lng":138.181239},
-    {"id":21, "pref":"岐阜県",   "city":"岐阜市",     "localGroup":"中部地方",   "prefyomi":"ぎふけん",     "cityyomi":"ぎふし",       "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.gifu.lg.jp/",        "addr":"岐阜県岐阜市薮田南2-1-1",                    "lat":35.391228, "lng":136.722311},
-    {"id":22, "pref":"静岡県",   "city":"静岡市",     "localGroup":"中部地方",   "prefyomi":"しずおかけん", "cityyomi":"しずおかし",   "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.shizuoka.jp/",       "addr":"静岡県静岡市葵区追手町9番6号",               "lat":34.976944, "lng":138.383009},
-    {"id":23, "pref":"愛知県",   "city":"名古屋市",   "localGroup":"中部地方",   "prefyomi":"あいちけん",   "cityyomi":"なごやし",     "LGyomi":"ちゅうぶちほう",     "url":"http://www.pref.aichi.jp/",          "addr":"愛知県名古屋市中区三の丸三丁目1番2号",       "lat":35.180344, "lng":136.906632},
-    {"id":24, "pref":"三重県",   "city":"津市",       "localGroup":"近畿地方",   "prefyomi":"みえけん",     "cityyomi":"つし",         "LGyomi":"きんきちほう",       "url":"http://www.pref.mie.jp/",            "addr":"三重県津市広明町13",                         "lat":34.730272, "lng":136.508598},
-    {"id":25, "pref":"滋賀県",   "city":"大津市",     "localGroup":"近畿地方",   "prefyomi":"しがけん",     "cityyomi":"おおつし",     "LGyomi":"きんきちほう",       "url":"http://www.pref.shiga.jp/",          "addr":"滋賀県大津市京町四丁目1番1号",               "lat":35.004528, "lng":135.868607},
-    {"id":26, "pref":"京都府",   "city":"京都市",     "localGroup":"近畿地方",   "prefyomi":"きょうとふ",   "cityyomi":"きょうとし",   "LGyomi":"きんきちほう",       "url":"http://www.pref.kyoto.jp/",          "addr":"京都府京都市上京区下立売通新町西入薮ノ内町", "lat":35.021393, "lng":135.755439},
-    {"id":27, "pref":"大阪府",   "city":"大阪市",     "localGroup":"近畿地方",   "prefyomi":"おおさかふ",   "cityyomi":"おおさかし",   "LGyomi":"きんきちほう",       "url":"http://www.pref.osaka.jp/",          "addr":"大阪府大阪市中央区大手前2丁目",              "lat":34.686555, "lng":135.519474},
-    {"id":28, "pref":"兵庫県",   "city":"神戸市",     "localGroup":"近畿地方",   "prefyomi":"ひょうごけん", "cityyomi":"こうべし",     "LGyomi":"きんきちほう",       "url":"http://web.pref.hyogo.jp/",          "addr":"兵庫県神戸市中央区下山手通5丁目10番1号",     "lat":34.691287, "lng":135.183061},
-    {"id":29, "pref":"奈良県",   "city":"奈良市",     "localGroup":"近畿地方",   "prefyomi":"ならけん",     "cityyomi":"ならし",       "LGyomi":"きんきちほう",       "url":"http://www.pref.nara.jp/",           "addr":"奈良県奈良市登大路町30",                     "lat":34.685326, "lng":135.832751},
-    {"id":30, "pref":"和歌山県", "city":"和歌山市",   "localGroup":"近畿地方",   "prefyomi":"わかやまけん", "cityyomi":"わかやまし",   "LGyomi":"きんきちほう",       "url":"http://www.pref.wakayama.lg.jp/",    "addr":"和歌山県和歌山市小松原通1-1",                "lat":34.226041, "lng":135.167504},
-    {"id":31, "pref":"鳥取県",   "city":"鳥取市",     "localGroup":"中国地方",   "prefyomi":"とっとりけん", "cityyomi":"とっとりし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.tottori.lg.jp/",     "addr":"鳥取県鳥取市東町1丁目220",                   "lat":35.503867, "lng":134.237716},
-    {"id":32, "pref":"島根県",   "city":"松江市",     "localGroup":"中国地方",   "prefyomi":"しまねけん",   "cityyomi":"まつえし",     "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.shimane.lg.jp/",     "addr":"島根県松江市殿町1番地",                      "lat":35.472324, "lng":133.05052},
-    {"id":33, "pref":"岡山県",   "city":"岡山市",     "localGroup":"中国地方",   "prefyomi":"おかやまけん", "cityyomi":"おかやまし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.okayama.jp/",        "addr":"岡山県岡山市内山下2丁目4番6号",              "lat":34.661759, "lng":133.934399},
-    {"id":34, "pref":"広島県",   "city":"広島市",     "localGroup":"中国地方",   "prefyomi":"ひろしまけん", "cityyomi":"ひろしまし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.hiroshima.lg.jp/",   "addr":"広島県広島市中区基町10-52",                  "lat":34.396603, "lng":132.459621},
-    {"id":35, "pref":"山口県",   "city":"山口市",     "localGroup":"中国地方",   "prefyomi":"やまぐちけん", "cityyomi":"やまぐちし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.yamaguchi.jp/",      "addr":"山口県山口市滝町1番1号",                     "lat":34.18613,  "lng":131.470497},
-    {"id":36, "pref":"徳島県",   "city":"徳島市",     "localGroup":"四国地方",   "prefyomi":"とくしまけん", "cityyomi":"とくしまし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.tokushima.jp/",      "addr":"徳島県徳島市万代町1丁目1番地",               "lat":34.065756, "lng":134.559297},
-    {"id":37, "pref":"香川県",   "city":"高松市",     "localGroup":"四国地方",   "prefyomi":"かがわけん",   "cityyomi":"たかまつし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.kagawa.jp/",         "addr":"香川県高松市番町4-1-10",                     "lat":34.340045, "lng":134.043369},
-    {"id":38, "pref":"愛媛県",   "city":"松山市",     "localGroup":"四国地方",   "prefyomi":"えひめけん",   "cityyomi":"まつやまし",   "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.ehime.jp/",          "addr":"愛媛県松山市一番町4丁目4-2",                 "lat":33.841669, "lng":132.765371},
-    {"id":39, "pref":"高知県",   "city":"高知市",     "localGroup":"四国地方",   "prefyomi":"こうちけん",   "cityyomi":"こうちし",     "LGyomi":"ちゅうごくちほう",   "url":"http://www.pref.kochi.jp/",          "addr":"高知県高知市丸ノ内1丁目2番20号",             "lat":33.5597,   "lng":133.531096},
-    {"id":40, "pref":"福岡県",   "city":"福岡市",     "localGroup":"九州地方",   "prefyomi":"ふくおかけん", "cityyomi":"ふくおかし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.fukuoka.lg.jp/",     "addr":"福岡県福岡市博多区東公園7番7号",             "lat":33.606781, "lng":130.418307},
-    {"id":41, "pref":"佐賀県",   "city":"佐賀市",     "localGroup":"九州地方",   "prefyomi":"さがけん",     "cityyomi":"さがし",       "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.saga.lg.jp/web/",    "addr":"佐賀県佐賀市城内1丁目1-59",                  "lat":33.24957,  "lng":130.299804},
-    {"id":42, "pref":"長崎県",   "city":"長崎市",     "localGroup":"九州地方",   "prefyomi":"ながさきけん", "cityyomi":"ながさきし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.nagasaki.jp/",       "addr":"長崎県長崎市江戸町2-13",                     "lat":32.744814, "lng":129.8737},
-    {"id":43, "pref":"熊本県",   "city":"熊本市",     "localGroup":"九州地方",   "prefyomi":"くまもとけん", "cityyomi":"くまもとし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.kumamoto.jp/",       "addr":"熊本県熊本市水前寺6丁目18番1号",             "lat":32.789816, "lng":130.74169},
-    {"id":44, "pref":"大分県",   "city":"大分市",     "localGroup":"九州地方",   "prefyomi":"おおいたけん", "cityyomi":"おおいたし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.oita.jp/",           "addr":"大分県大分市大手町3丁目1番1号",              "lat":33.238205, "lng":131.612625},
-    {"id":45, "pref":"宮崎県",   "city":"宮崎市",     "localGroup":"九州地方",   "prefyomi":"みやざきけん", "cityyomi":"みやざきし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.miyazaki.lg.jp/",    "addr":"宮崎県宮崎市橘通東二丁目10番1号",            "lat":31.911058, "lng":131.423883},
-    {"id":46, "pref":"鹿児島県", "city":"鹿児島市",   "localGroup":"九州地方",   "prefyomi":"かごしまけん", "cityyomi":"かごしまし",   "LGyomi":"きゅうしゅうちほう", "url":"http://www.pref.kagoshima.jp/",      "addr":"鹿児島県鹿児島市鴨池新町10番1号",            "lat":31.560166, "lng":130.557994},
-    {"id":47, "pref":"沖縄県",   "city":"那覇市",     "localGroup":"沖縄地方",   "prefyomi":"おきなわけん", "cityyomi":"なはし",       "LGyomi":"おきなわちほう",     "url":"http://www.pref.okinawa.jp/",        "addr":"沖縄県那覇市泉崎1-2-2",                      "lat":26.212418, "lng":127.680895},
-  ]
-};
-</script>
+<!-- 日本地図GeoJson/　都道府県データpref-->
+  <link rel="stylesheet" href="index2.css">
+  <script src="index2.js"></script> <!--このローカルファイルは読み込んでくれてる？？あ！htmlファイルと同じ名前の時いけてる！-->
+  <!--<script src="https://nowfujii.github.io/testSVG/japan.js"></script>-->
+  <!--  <script src="pref.js" ></script> ローカルファイルを読み込んでくれない-->
+  <script src="https://nowfujii.github.io/testSVG/pref.js"></script>
 
 
-  <style media="screen">
-    /* <!--メイン画面いっぱいに設定-->*/
-    html, body {
-      width: 100%;
-      height: 100%;
-      padding: 0px;
-      margin: 0px;
-    }
-    #map{
-      z-index: 100;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-    }
-    .leaflet-background-pane {
-      z-index: 100;
-    }
-    /*<!--Zoomボタンのサイズ-->*/
-    .leaflet-bar a, .leaflet-bar a:hover {
-       width: 104px;
-       height: 104px;
-       line-height: 104px;
-    }
-    .leaflet-bar a:first-child {
-       border-top-left-radius: 16px;
-       border-top-right-radius: 16px;
-    }
-    .leaflet-bar a:last-child {
-       border-bottom-left-radius: 16px;
-       border-bottom-right-radius: 16px;
-    }
-    .leaflet-touch .leaflet-bar a {
-      width: 104px;
-      height: 104px;
-      line-height: 104px;
-    }
-
-    /*<!--地図切り替えボタンのサイズ-->*/
-    .leaflet-control-layers-toggle {
-      width: 104px;
-      height: 104px;
-    }
-    .leaflet-retina .leaflet-control-layers-toggle {
-      background-size: 104px 104px;
-    }
-    .leaflet-touch .leaflet-control-layers-toggle {
-      width: 104px;
-      height: 104px;
-    }
-
-    /*スケール*/
-    .leaflet-control-scale-line {
-      border: 2px solid #777;
-      border-top: none;
-      line-height: 1.1;
-      padding: 2px 5px 1px;
-      font-size: 50px;
-      white-space: nowrap;
-      overflow: hidden;
-      -moz-box-sizing: border-box;
-           box-sizing: border-box;
-      background: #fff;
-      background: rgba(200, 200, 200, 0.5);
-      }
-
-    /*アトリビューション　Copyrifht*/
-    .leaflet-container .leaflet-control-attribution {
-        font-size: 30px;
-    }
-
-    /*追加ボタン*/
-    .leaflet-bar button {
-      height: 100px !important;
-      width: 100px !important;
-      font-size: 50px;
-      padding: 16px;
-    }
 
 
-    /*ポップアップサイズ*/
-  .leaflet-popup-tip-container {
-    width: 150px;
-    height: 50px;
-    position: absolute;
-    left: 50%;
-    margin-left: -20px;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  </style>
 
   <body>
     <div id="nuri"></div>
@@ -182,44 +41,52 @@ var prefJson = {
   var lat = 34.6878788;
   var lng = 135.5060062;
 
+  //十字マークアイコン設定
+  var crossIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/map/crosshairs.png', iconSize: [64, 64], iconAnchor: [32, 32] });
+  var closeIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/close.png', iconSize: [64, 64], iconAnchor: [32, 32] });
+  var viewIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/view.png', iconSize: [64, 64], iconAnchor: [32, 32] });
+
   //ベースレイヤー：地理院地図　白地図タイル
   var gsiwhite = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
     attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:白地図</a>",
-    id: '地理院地図:白地図', minZoom: 5, maxNativeZoom: 14,
+    id: '地理院地図:白地図'
   });
   //ベースレイヤー：地理院地図 標準地図タイル
   var gsi = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
     attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:標準地図</a>",
-    id: '地理院地図:標準', minZoom: 2, maxNativeZoom: 18,
+    id: '地理院地図:標準'
   });
   //ベースレイヤー：地理院地図 淡色地図タイル
   var gsipale = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
     attribution: "<a href='http://portal.cyberjapan.jp/help/termsofuse.html' target='_blank'>©国土地理院:淡色地図</a>",
-    id: '地理院地図：淡色地図', minZoom: 2, maxNativeZoom: 18,
+    id: '地理院地図：淡色地図'
   });
   //ベースレイヤー：地理院地図　航空写真タイル
   var gsiphoto = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',{
     attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:航空写真</a>",
-    id: '地理院地図:最新写真', minZoom: 8, maxNativeZoom: 18,
+    id: '地理院地図:最新写真'
   });
+
   //ベースレイヤー：オープンストリート タイル
   var osm = new L.tileLayer('https://tile.openstreetmap.jp/{z}/{x}/{y}.png', {
     attribution: "<a href='https://osm.org/copyright' target='_blank'>OpenStreetMap</a> ©contributors:標準",
-    id: 'オープンストリートマップ', minZoom: 0, maxNativeZoom: 18,
+    id: 'オープンストリートマップ'
   });
+
   //ベースレイヤー：Google Map
   var g_map = new L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
     attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:標準地図</a>",
-    id: 'GoogleMap:標準', minZoom: 0, maxNativeZoom: 22,});
+    id: 'GoogleMap:標準'});
   var g_roadmap = new L.tileLayer('https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
     attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:道路地図</a>",
-    id: 'GoogleMap:道路', minZoom: 0, maxNativeZoom: 23,});
+    id: 'GoogleMap:道路'});
   var g_satelite = new L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
     attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:衛星写真</a>",
-    id: 'GoogleMap:衛星写真', minZoom: 0, maxNativeZoom: 24,});
+    id: 'GoogleMap:衛星写真'});
   var g_hybrid = new L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
     attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:ハイブリッド地図</a>",
-    id: 'GoogleMap:ハイブリッド', minZoom: 0, maxNativeZoom: 25,});
+    id: 'GoogleMap:ハイブリッド'});
+
 
   //baseMapsオブジェクトのプロパティに複数のタイルを設定
   var baseMaps = {
@@ -234,26 +101,21 @@ var prefJson = {
     "<span style='font-size:40px'>Google Map:ハイブリッド</span>"  : g_hybrid,
   };
 
+
   //leaflet初期設定
-  var map = L.map('map', { zoomControl: false, zoomSnap: 0.125 }).setView([lat, lng], 4);;  //標準ズームをキャンセルし、ズーム間隔を細かくします
+  var map = L.map('map', { attributionControl: false, zoomControl: false, zoomSnap: 0.1 }).setView([lat, lng], 4);;  //標準ズームをキャンセルし、ズーム間隔を細かくします
+  L.control.attribution({ position: 'bottomleft'}).addTo(map);  //著作表示：左下（標準だと右下）
   gsiwhite.addTo(map);  //国土地理院:白地図　ベース地図初期設定
 
+  //スケール表示
+  L.control.scale({ maxWidth: 600, position: 'topleft', imperial: false }).addTo(map);
 
-  //ズームコントロール
+  //ズームボタン
   L.control.zoom({ position: 'bottomright' , zoomInTitle: 'ズームイン', zoomOutTitle: 'ズームアウト'}).addTo(map);
-
-  //スケールコントロール
-  L.control.scale({ maxWidth: 600, position: 'bottomleft', imperial: false }).addTo(map);
-
-  //マーカー（現在地）
-  var popup = L.popup().setContent("<span style='font-size:60px'>"+"<ruby>"+"現在地"+"<rt>"+"げんざいち"+"</rt>"+"</ruby>"+ "<br>"+"</span>");
-  L.marker( [lat, lng], { draggable: false }).bindPopup(popup).addTo(map);
-  //L.marker([lat, lng],{title:"現在地"}).addTo(map);
-
-
 
   //日本列島全体表示ボタン
   L.easyButton({
+      position: 'bottomright', // topleft, topright, bottomleft, bottomright
       states: [{
                 stateName: 'zoom-to-japan',                   // 状態のIDのようなもの
                 icon:      'fas fa-globe',                    // 使用するアイコン https://fontawesome.com/icons?d=gallery&p=2&m=free
@@ -275,16 +137,21 @@ var prefJson = {
       }]
   }).addTo( map );
 
-  //オーバーレイヤー：Japan geoJSONを２つ（ON/OFF）定義
-  var geoJsonOn    = new L.geoJson(japanJson, { style: style,  onEachFeature: onEachFeature  }).addTo(map);  //黒枠白塗り
-  var geoJsonOff   = new L.geoJson(japanJson, { style: style2, onEachFeature: onEachFeature2 }).addTo(map);  //黒枠透明
-  var geoJsonGroup = new L.layerGroup([geoJsonOn, geoJsonOff]);
+  //レイヤーグループ
+  var geoJsonGroup = new L.layerGroup();
   var markerGroup  = new L.layerGroup();
-  geoJsonGroup.addLayer(geoJsonOn);
-  geoJsonGroup.addLayer(geoJsonOff);
+  var gpsGroup     = new L.layerGroup();
+  var crossGroup   = new L.layerGroup();
+
+  //オーバーレイヤー：Japan GeoJsonを２つ定義
+  var geoJsonOn    = new L.geoJson(japanJson, { style: style,  onEachFeature: onEachFeature  }).addTo(map);  //黒枠カラー塗り
+  var geoJsonOff   = new L.geoJson(japanJson, { style: style2, onEachFeature: onEachFeature2 }).addTo(map);  //黒枠透明
+  //レイヤーグループセット
+  geoJsonGroup.addLayer(geoJsonOn);   //日本地図データ　カラー塗（都道府県クリックポップアップ表示付き）
+  geoJsonGroup.addLayer(geoJsonOff);  //日本地図データ　透明塗（都道府県クリックポップアップ表示付き）
 
 
-  //マーカー（県庁所在地）
+  //県庁所在地マーカーレイヤーグループセット
   for (var i=0; i < prefJson.marker.length; i++){
     //マーカークリック時のポップアップ設定
     var popup = L.popup().setContent( "<span style='font-size:40px'>"+"【<ruby>"+"県庁所在地"+"<rt>"+"けんちょうしょざいち"+"</rt>"+"</ruby>"+ "】<br>"+"</span>"+
@@ -294,39 +161,79 @@ var prefJson = {
     markerGroup.addLayer(mk);
   }
 
+  // 現在地マーカー
+  var popup = L.popup().setContent("<span style='font-size:60px'>"+"<ruby>"+"現在地"+"<rt>"+"げんざいち"+"</rt>"+"</ruby>"+ "<br>"+"</span>");
+  var gpsMarker = L.marker( [lat, lng], { draggable: false, icon: closeIcon }).bindPopup(popup).addTo(map);
+  gpsGroup.addLayer(gpsMarker);       //gpsマーカーグループセット
 
-  //コントローラーの選択追加
+  // 十字マークを地図中央に表示
+  var crossMarker = L.marker( map.getCenter(),{ icon:crossIcon, zIndexOffset:1000, interactive:false }).addTo(map);
+  crossGroup.addLayer(crossMarker);
+
+  // コントローラーの選択追加
   var overlayLayerControls = {
     "<span style='font-size:40px'>地方名別色</span>": geoJsonOn,
     "<span style='font-size:40px'>選択時不透明</span>": geoJsonOff,
-    "<span style='font-size:40px'>県庁所在地マーカー</span>": markerGroup
+    "<span style='font-size:40px'>現在地マーカー</span>": gpsGroup,
+    "<span style='font-size:40px'>県庁所在地マーカー</span>": markerGroup,
+    "<span style='font-size:40px'>十字マーク</span>": crossGroup,
   };
 
-  geoJsonOn.addTo(map);
-  markerGroup.addTo(map);
+  //グループ初期設定
+  geoJsonOn.addTo(map);     //地方名別色
+  geoJsonOff.addTo(map);    //選択時不透明
+  markerGroup.addTo(map);   //県庁所在地マーカー
+  gpsGroup.addTo(map);      //GPSマーカー
+  crossGroup.addTo(map);    //十字マーク
 
   //地図選択ボタン
   L.control.layers(baseMaps, overlayLayerControls, { collapsed: true, }).addTo(map);
 
 
+  // 十字マークのGPS位置を表示する
+  map.on('moveend', function(e) {
+    crossMarker.setLatLng(map.getCenter());
+    var mes = "lat: " + map.getCenter().lat + " lng: " + map.getCenter().lng;
+    console.log(mes);
+
+    if (window.Unity){
+      Unity.call(mes);   //Unityへ送信：ブラウザのエラーは無視
+    }
+  });
+
+
+
+
 
   //読み込みエラー
-  if (prefJson == null){
+  if (!window.prefJson){
     console.log("prefJsonが読み込めていない！！！");  //デバッグ表示
-    Unity.call("prefJsonが読み込めていない！！！");   //Unityへ送信：ブラウザのエラーは無視
+    //Unity.call("prefJsonが読み込めていない！！！");   //Unityへ送信：ブラウザのエラーは無視
   }
-  if (japanJson == null){
+  if (!window.japanJson){
     console.log("japanJsonが読み込めていない！！！");  //デバッグ表示
-    Unity.call("japanJsonが読み込めていない！！！");   //Unityへ送信：ブラウザのエラーは無視
+    //Unity.call("japanJsonが読み込めていない！！！");   //Unityへ送信：ブラウザのエラーは無視
   }
+
+
+
 
 
 
 //インタラクション
+  // 現在地を取得
+  function getgeo() {
+    map.on('locationerror', onLocationError);
+    map.locate({
+      setView: "true"
+    });
+  }
+  function onLocationError(e) {
+    alert(e.message);
+  }
 
-  //通常表示 // 黒枠白塗りスタイル
+  //通常表示 // 黒枠カラー塗りスタイル
   function style(feature) {
-//    return {        color: '#000', fillColor: '#efe', weight: 2, opacity: 1, fillOpacity: 1 };    //薄緑
     return {        color: '#000', fillColor: getColor(feature.properties.area), weight: 2, opacity: 1, fillOpacity: 1 };    //薄緑
   }
   // get color depending on population area value
@@ -372,7 +279,10 @@ var prefJson = {
     map.fitBounds(e.target.getBounds());              //都道府県のサイズと位置にフィットしズームも自動調整される
 
     console.log(e.target.feature.properties.nam_ja);  //デバッグ表示
-    Unity.call(e.target.feature.properties.nam_ja);   //Unityへ送信：ブラウザのエラーは無視
+
+    if (window.Unity){
+      Unity.call(e.target.feature.properties.nam_ja);   //Unityへ送信：ブラウザのエラーは無視
+    }
   }
 
   //ON:クリック時の動作
@@ -424,13 +334,13 @@ var prefJson = {
 
 
   //Unityからロードされたjsデータが送られてくる
-  Unity.LoadJs = function(data){
-//    data = data.replace(/^save__/,"");
-//    var obj = JSON.parse(unescape(base64decode(data)));
-    console.log(data);
-    //復元されたセーブデータから状態を復元
-//    player.status = obj;
-  }
+//  window.addEventListener('DOMContentLoaded', function(){
+//    /** jQueryの処理 */
+//  });
+
+//  Unity.LoadJs = function(data){
+//      console.log(data);
+//  }
 
 
 </script>
