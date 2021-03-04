@@ -1,93 +1,139 @@
 
-  <style media="screen">
-    /* <!--メイン画面いっぱいに設定-->*/
-    html, body {
-      width: 100%;
-      height: 100%;
-      padding: 0px;
-      margin: 0px;
-    }
-    #map{
-      z-index: 100;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-    }
-    .leaflet-background-pane {
-      z-index: 100;
-    }
-    /*<!--Zoomボタンのサイズ-->*/
-    .leaflet-bar a, .leaflet-bar a:hover {
-       width: 104px;
-       height: 104px;
-       line-height: 104px;
-    }
-    .leaflet-bar a:first-child {
-       border-top-left-radius: 16px;
-       border-top-right-radius: 16px;
-    }
-    .leaflet-bar a:last-child {
-       border-bottom-left-radius: 16px;
-       border-bottom-right-radius: 16px;
-    }
-    .leaflet-touch .leaflet-bar a {
-      width: 104px;
-      height: 104px;
-      line-height: 104px;
-    }
-
-    /*<!--地図切り替えボタンのサイズ-->*/
-    .leaflet-control-layers-toggle {
-      width: 104px;
-      height: 104px;
-    }
-    .leaflet-retina .leaflet-control-layers-toggle {
-      background-size: 104px 104px;
-    }
-    .leaflet-touch .leaflet-control-layers-toggle {
-      width: 104px;
-      height: 104px;
-    }
-
-    /*スケール*/
-    .leaflet-control-scale-line {
-      border: 2px solid #777;
-      border-top: none;
-      line-height: 1.1;
-      padding: 2px 5px 1px;
-      font-size: 50px;
-      white-space: nowrap;
-      overflow: hidden;
-      -moz-box-sizing: border-box;
-           box-sizing: border-box;
-      background: #fff;
-      background: rgba(200, 200, 200, 0.5);
-      }
-
-    /*アトリビューション　Copyrifht*/
-    .leaflet-container .leaflet-control-attribution {
-        font-size: 30px;
-    }
-
-    /*追加ボタン*/
-    .leaflet-bar button {
-      height: 100px !important;
-      width: 100px !important;
-      font-size: 50px;
-      padding: 16px;
-    }
-
-    /*ポップアップサイズ*/
-  .leaflet-popup-tip-container {
-    width: 150px;
-    height: 50px;
-    position: absolute;
-    left: 50%;
-    margin-left: -20px;
-    overflow: hidden;
-    pointer-events: none;
+  /* <!--メイン画面いっぱいに設定-->*/
+  html, body {
+    width:              100%;
+    height:             100%;
+    padding:              0px;
+    margin:               0px;
+  }
+  /*地図画面メイン*/
+  #map{
+    z-index:            100;
+    position:           fixed;
+    width:              100%;
+    height:             100%;
+    background-color:   #fff;
+  }
+      /*十字マーク*/
+  #cross {
+    left:               50%;
+    top:                50%;
+    right:              50%;
+    bottom:             50%;
+    position:           absolute;
+    z-index:            10000;        /*この値が曲者でレイヤーの深度を表す。500以下だと地図の下に埋まる！*/
+  }
+  /*十字マークのimg*/
+  #_cross {
+    margin-top:       -16px;
+    margin-left:      -16px;
+    width:            100px;         /**/
+    height:           100px;        /**/
   }
 
+  /*leafret.cssをオーバーライド*/
+  .leaflet-background-pane {
+    z-index:          10;
+  }
+  /*<!--Zoomボタンのサイズ-->*/
+  .leaflet-bar a, .leaflet-bar a:hover {
+     width:           104px;
+     height:          104px;
+     line-height:     104px;
+  }
+  .leaflet-bar a:first-child {
+     border-top-left-radius:      16px;
+     border-top-right-radius:     16px;
+  }
+  .leaflet-bar a:last-child {
+     border-bottom-left-radius:   16px;
+     border-bottom-right-radius:  16px;
+  }
+  .leaflet-touch .leaflet-bar a {
+    width:                       104px;
+    height:                      104px;
+    line-height:                 104px;
+  }
 
-  </style>
+  /*地図切り替えボタンのサイズ*/
+  .leaflet-control-layers-toggle {
+    width:                       104px;
+    height:                      104px;
+  }
+  .leaflet-retina .leaflet-control-layers-toggle {
+    background-size:             104px 104px;
+  }
+  .leaflet-touch .leaflet-control-layers-toggle {
+    width:                       104px;
+    height:                      104px;
+  }
+
+  /*スケール*/
+  .leaflet-control-scale-line {
+    border:                       2px solid #777;
+    border-top:                 none;
+    line-height:                  1.1;
+    padding:                      2px 5px 1px;
+    font-size:                   50px;
+    white-space:                nowrap;
+    overflow:                   hidden;
+    -moz-box-sizing:            border-box;
+         box-sizing:            border-box;
+    background:                 #fff;
+    background:                 rgba(200, 200, 200, 0.5);
+    }
+
+  /*アトリビューション　Copyrifht*/
+  .leaflet-container .leaflet-control-attribution {
+    font-size:                  30px;
+  }
+
+  /*追加ボタン*/
+  .leaflet-bar button {
+    height:                     100px !important;
+    width:                      100px !important;
+    font-size:                   50px;
+    padding:                     16px;
+  }
+
+   /*ポップアップサイズ*/
+  leaflet-popup-tip-container {
+   width:                       200px;
+   height:                       50px;
+   position:                    absolute;
+   left:                         50%;
+   margin-left:                 -20px;
+   overflow:                    hidden;
+   pointer-events:              none;
+  }
+
+  /*情報表示用*/
+  .info {
+    padding:                     6px 8px;
+    font:                       14px/16px Arial, Helvetica, sans-serif;
+    background:                 white;
+    background:                 rgba(255,255,255,0.8);
+    box-shadow:                  0 0 15px rgba(0,0,0,0.2);
+    border-radius:               5px;
+  }
+
+  .panel {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    left: 50px;
+    top: 50px;
+    position: absolute;
+    z-index: 10;
+    opacity: 0.90;
+    background-color: rgb(220, 255, 220);
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    border-radius: 5px;
+    line-height: 1.6em;
+  }
+
+  .select01 {
+    font: 14px Arial, Helvetica, sans-serif;
+    opacity: 1.00;
+    background-color: rgb(220, 220, 255);
+    border-radius: 5px;
+  }
