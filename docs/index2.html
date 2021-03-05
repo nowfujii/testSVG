@@ -10,8 +10,9 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <!-- ICON plugin -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+  <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+  <!--<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">-->
 
 <!-- easy button-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
@@ -19,96 +20,192 @@
 
 <!-- 日本地図GeoJson/　都道府県データpref-->
   <link rel="stylesheet" href="index2.css">
-  <script src="index2.js"></script> <!--このローカルファイルは読み込んでくれてる？？あ！htmlファイルと同じ名前の時いけてる！-->
+  <link rel="stylesheet" href="https://nowfujii.github.io/testSVG/index2.css">
+  <script src="index2.js"></script> <!--このローカルファイルは読み込んでくれてる？？あ！htmlファイルと同じ名前の時いけてる！ので、.jsはここに統合した-->
   <!--<script src="https://nowfujii.github.io/testSVG/japan.js"></script>-->
   <!--  <script src="pref.js" ></script> ローカルファイルを読み込んでくれない-->
-  <script src="https://nowfujii.github.io/testSVG/pref.js"></script>
-
-
-
-
+  <!--<script src="https://nowfujii.github.io/testSVG/pref.js"></script>-->
 
   <body>
+    <!--背景色用-->
     <div id="nuri"></div>
-    <div id="map"></div>
+    <!--地図用-->
+    <div id="map">
+    <!--十字マーク-->
+      <div id="cross">
+        <IMG id="_cross" src="https://maps.gsi.go.jp/image/map/crosshairs.png" style="visibility: visilbe">  <!--visilbe / hidden-->
+      </div>
+    </div>
   </body>
 </html>
 
 
 <script type="text/javascript">
+  //初期表示位置とズーム設定　（大阪府大阪市）
+  var id             = 0;            //都道府県ID
+  var pref           = "";           //都道府県名
+  var lat            = 34.6878788;   //緯度
+  var lng            = 135.5060062;  //経度
+  var zoom           = 6;            //ズーム
 
-  //大阪府大阪市
-  var lat = 34.6878788;
-  var lng = 135.5060062;
+  var maptype        = 0;            //ベース地図種類 0:地-白、1:地-標準、2:地-単色、3:地-写真、4:OSM-JP、5:OSM-ORG、6,G-標準、7:G-道路、8:G-写真、9:G-ハイブリッド
+  var localnameFlg   = true;         //地方名色別         true:ON false:OFF
+  var transparentFlg = false;        //選択時不透明       true:ON false:OFF
+  var gpsmarkerFlg   = false;        //現在地マーカー     true:ON false:OFF
+  var prefmarkerFlg  = false;        //県庁所在地マーカー true:ON false:OFF
+  var popupFlg       = true;         //ポップアップ表示   true:ON false:OFF
 
-  //十字マークアイコン設定
-  var crossIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/map/crosshairs.png', iconSize: [64, 64], iconAnchor: [32, 32] });
-  var closeIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/close.png', iconSize: [64, 64], iconAnchor: [32, 32] });
-  var viewIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/view.png', iconSize: [64, 64], iconAnchor: [32, 32] });
+
+  //urlパラメータ取得
+  if (getParam('id') > 0 && getParam('id') < 48){
+    id    = getParam('id');                              //index2.html?id=1
+    pref  = prefJson.marker[id-1].pref;
+    lat   = prefJson.marker[id-1].lat2;
+    lng   = prefJson.marker[id-1].lng2;
+    zoom  = prefJson.marker[id-1].zoom;
+
+    console.log("id:" + id + " 都道府県:" + pref + " lat:" + lat + " lng:" + lng + "zoom:" + zoom);
+  }
+
+  if (getParam('zoom') > 1 && getParam('zoom') < 23 && getParam('zoom') != null){
+    zoom = getParam('zoom');                            //index2.html?zoom=6
+    console.log("zoom:"+zoom);
+  }
+
+  if (getParam('maptype') >= 0 && getParam('maptype') < 10 && getParam('maptype') != null){
+    maptype = getParam('maptype');
+    console.log("maptype:" + maptype);
+  }
+
+  if (getParam('localnameFlg') == 'true'){
+    localnameFlg = true;
+    console.log("localnameFlg:" + localnameFlg);
+  } else if (getParam('localnameFlg') == 'false'){
+    localnameFlg = false;
+    console.log("localnameFlg:" + localnameFlg);
+  }
+  if (getParam('transparentFlg') == 'true'){
+    transparentFlg = true;
+    console.log("transparentFlg:" + transparentFlg);
+  } else   if (getParam('transparentFlg') == 'false'){
+    transparentFlg = false;
+    console.log("transparentFlg:" + transparentFlg);
+  }
+  if (getParam('gpsmarkerFlg') == 'true'){
+    gpsmarkerFlg = true;
+    console.log("gpsmarkerFlg:" + gpsmarkerFlg);
+  } else   if (getParam('gpsmarkerFlg') == 'false'){
+    gpsmarkerFlg = false;
+    console.log("gpsmarkerFlg:" + gpsmarkerFlg);
+  }
+  if (getParam('prefmarkerFlg') == 'true'){
+    prefmarkerFlg = true;
+    console.log("prefmarkerFlg:" + prefmarkerFlg);
+  } else if (getParam('prefmarkerFlg') == 'false'){
+    prefmarkerFlg = false;
+    console.log("prefmarkerFlg:" + prefmarkerFlg);
+  }
+  if (getParam('popupFlg') == 'true'){
+    popupFlg = true;
+    console.log("popupFlg:" + popupFlg);
+  } else   if (getParam('popupFlg') == 'false'){
+    popupFlg = false;
+    console.log("popupFlg:" + popupFlg);
+  }
+
+
+  //アイコン設定
+  var myIcon    = L.divIcon({className: 'my-div-icon'});  //cssにて影付きの小さな白い正方形をセット（leafret.cssに設定されている）
+  var crossIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/map/crosshairs.png' , iconSize: [64, 64], iconAnchor: [32, 32] });
+  var closeIcon = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/close.png'   , iconSize: [64, 64], iconAnchor: [32, 32] });
+  var viewIcon  = L.icon({ iconUrl: 'https://maps.gsi.go.jp/image/system/view.png'    , iconSize: [64, 64], iconAnchor: [32, 32] });
 
   //ベースレイヤー：地理院地図　白地図タイル
   var gsiwhite = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
-    attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:白地図</a>",
-    id: '地理院地図:白地図'
+    attribution:  "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:白地図</a>",
+    id:           '地理院地図:白地図', minNativeZoom:2, maxNativeZoom: 18, minZoom: 4, maxZoom:14,
   });
   //ベースレイヤー：地理院地図 標準地図タイル
   var gsi = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-    attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:標準地図</a>",
-    id: '地理院地図:標準'
+    attribution:  "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:標準地図</a>",
+    id:           '地理院地図:標準', minNativeZoom:1, maxNativeZoom: 18, minZoom: 1, maxZoom:25,
   });
   //ベースレイヤー：地理院地図 淡色地図タイル
   var gsipale = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
-    attribution: "<a href='http://portal.cyberjapan.jp/help/termsofuse.html' target='_blank'>©国土地理院:淡色地図</a>",
-    id: '地理院地図：淡色地図'
+    attribution:  "<a href='http://portal.cyberjapan.jp/help/termsofuse.html' target='_blank'>©国土地理院:淡色地図</a>",
+    id:           '地理院地図：淡色地図', minNativeZoom:1, maxNativeZoom: 17, minZoom: 1, maxZoom:25,
   });
   //ベースレイヤー：地理院地図　航空写真タイル
   var gsiphoto = new L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',{
-    attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:航空写真</a>",
-    id: '地理院地図:最新写真'
+    attribution:  "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>©国土地理院:航空写真</a>",
+    id:           '地理院地図:最新写真', minNativeZoom:2, maxNativeZoom: 18, minZoom: 2, maxZoom:25,
   });
 
-  //ベースレイヤー：オープンストリート タイル
-  var osm = new L.tileLayer('https://tile.openstreetmap.jp/{z}/{x}/{y}.png', {
-    attribution: "<a href='https://osm.org/copyright' target='_blank'>OpenStreetMap</a> ©contributors:標準",
-    id: 'オープンストリートマップ'
+  //ベースレイヤー：OpenStreetMap(JP) タイル
+  var osm_jp = new L.tileLayer('https://tile.openstreetmap.jp/{z}/{x}/{y}.png', {
+    attribution:  "<a href='https://osm.org/copyright' target='_blank'>©OpenStreetMap</a> ©contributors:標準(JP)",
+    id:           'OpenStreetMap(JP)', minNativeZoom:2, maxNativeZoom: 21, minZoom: 2, maxZoom:25,
+  });
+  //ベースレイヤー：OpenStreetMap(ORG) タイル
+  var osm_org = new L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:  "<a href='https://osm.org/copyright' target='_blank'>©OpenStreetMap</a> ©contributors:標準(ORG)",
+    id:           'OpenStreetMap(ORG)', minNativeZoom:2, maxNativeZoom: 18, minZoom: 2, maxZoom:25,
   });
 
   //ベースレイヤー：Google Map
   var g_map = new L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
-    attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:標準地図</a>",
-    id: 'GoogleMap:標準'});
+    attribution:  "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:標準地図</a>",
+    id:           'GoogleMap:標準', minNativeZoom:2, maxNativeZoom: 21, minZoom: 2, maxZoom:25,
+  });
   var g_roadmap = new L.tileLayer('https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
-    attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:道路地図</a>",
-    id: 'GoogleMap:道路'});
+    attribution:  "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:道路地図</a>",
+    id:           'GoogleMap:道路', minNativeZoom:2, maxNativeZoom: 21, minZoom: 2, maxZoom:25,
+  });
   var g_satelite = new L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', {
-    attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:衛星写真</a>",
-    id: 'GoogleMap:衛星写真'});
+    attribution:  "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:衛星写真</a>",
+    id:           'GoogleMap:衛星写真', minNativeZoom:2, maxNativeZoom: 21, minZoom: 2, maxZoom:25,
+  });
   var g_hybrid = new L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-    attribution: "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:ハイブリッド地図</a>",
-    id: 'GoogleMap:ハイブリッド'});
+    attribution:  "<a href='https://developers.google.com/maps/documentation' target='_blank'>©Google:ハイブリッド地図</a>",
+    id:           'GoogleMap:ハイブリッド', minNativeZoom:2, maxNativeZoom: 21, minZoom: 2, maxZoom:25,
+  });
 
 
-  //baseMapsオブジェクトのプロパティに複数のタイルを設定
+  //baseMapsオブジェクトのプロパティに複数のベースレイヤーを設定
   var baseMaps = {
-    "<span style='font-size:40px'>地理院地図:白</span>" : gsiwhite,
-    "<span style='font-size:40px'>地理院地図:標準</span>" : gsi,
-    "<span style='font-size:40px'>地理院地図:淡色</span>" : gsipale,
-    "<span style='font-size:40px'>地理院地図:航空写真</span>" : gsiphoto,
-    "<span style='font-size:40px'>OpenStreetMap</span>"  : osm,
-    "<span style='font-size:40px'>Google Map:標準</span>"  : g_map,
-    "<span style='font-size:40px'>Google Map:道路</span>"  : g_roadmap,
-    "<span style='font-size:40px'>Google Map:衛星写真</span>"  : g_satelite,
-    "<span style='font-size:40px'>Google Map:ハイブリッド</span>"  : g_hybrid,
+    "<span style='font-size:40px'>地理院地図:白地図</span>" :         gsiwhite,
+    "<span style='font-size:40px'>地理院地図:標準地図</span>" :       gsi,
+    "<span style='font-size:40px'>地理院地図:淡色地図</span>" :       gsipale,
+    "<span style='font-size:40px'>地理院地図:写真</span>" :           gsiphoto,
+    "<span style='font-size:40px'>OpenStreetMap(JP)</span>"  :        osm_jp,
+    "<span style='font-size:40px'>OpenStreetMap(ORG)</span>"  :       osm_org,
+    "<span style='font-size:40px'>Google Map:標準</span>"  :          g_map,
+    "<span style='font-size:40px'>Google Map:道路</span>"  :          g_roadmap,
+    "<span style='font-size:40px'>Google Map:衛星写真</span>"  :      g_satelite,
+    "<span style='font-size:40px'>Google Map:ハイブリッド</span>"  :  g_hybrid,
   };
-
+  //var baseMapsList = {0:"gsiwhite",1:"gsi",2:"gsipale",3:"gsiphoto",4:"osm_jp", 5:"osm_org",6:"g_map",7:"g_roadmap",8:"g_satelite",9:"g_hybrid"};
+  //console.log(baseMapsList[0]);
 
   //leaflet初期設定
-  var map = L.map('map', { attributionControl: false, zoomControl: false, zoomSnap: 0.1 }).setView([lat, lng], 4);;  //標準ズームをキャンセルし、ズーム間隔を細かくします
+  var map = L.map('map', { attributionControl: false, zoomControl: false, zoomSnap: 0.1 }).setView([lat, lng], zoom);  //標準ズームをキャンセルし、ズーム間隔を細かくします
   L.control.attribution({ position: 'bottomleft'}).addTo(map);  //著作表示：左下（標準だと右下）
-  gsiwhite.addTo(map);  //国土地理院:白地図　ベース地図初期設定
+  //ベース地図初期設定
+  switch(maptype){
+    case "0": gsiwhite.addTo(map); break;
+    case "1": gsi.addTo(map); break;
+    case "2": gsipale.addTo(map); break;
+    case "3": gsiphoto.addTo(map); break;
+    case "4": osm_jp.addTo(map); break;
+    case "5": osm_org.addTo(map); break;
+    case "6": g_map.addTo(map); break;
+    case "7": g_roadmap.addTo(map); break;
+    case "8": g_satelite.addTo(map); break;
+    case "9": g_hybrid.addTo(map); break;
+  }
 
   //スケール表示
-  L.control.scale({ maxWidth: 600, position: 'topleft', imperial: false }).addTo(map);
+  L.control.scale({ maxWidth: 500, position: 'topleft', metric: true, imperial: false, updateWhenIdle: false }).addTo(map);
 
   //ズームボタン
   L.control.zoom({ position: 'bottomright' , zoomInTitle: 'ズームイン', zoomOutTitle: 'ズームアウト'}).addTo(map);
@@ -120,11 +217,8 @@
                 stateName: 'zoom-to-japan',                   // 状態のIDのようなもの
                 icon:      'fas fa-globe',                    // 使用するアイコン https://fontawesome.com/icons?d=gallery&p=2&m=free
                 title:     '日本全体',                        // マウスオーバー時にツールチップに表示される名前
-                onClick: function(btn, map) {
-                    map.setView([lat,lng],4);
-                    btn.state('zoom-to-japan');    // ボタンクリック後の状態を指定
-                }
-  /*             },
+                onClick: function(btn, map) { map.setView([lat,lng],zoom); btn.state('zoom-to-japan');}    // ボタンクリック後の状態を指定
+  /*           },
                {
                 stateName: 'zoom-to-jsonClear',                   // 状態のIDのようなもの
                 icon:      '<fas fa-ban',                    // 使用するアイコン https://fontawesome.com/icons?d=gallery&p=2&m=free
@@ -144,65 +238,109 @@
   var crossGroup   = new L.layerGroup();
 
   //オーバーレイヤー：Japan GeoJsonを２つ定義
-  var geoJsonOn    = new L.geoJson(japanJson, { style: style,  onEachFeature: onEachFeature  }).addTo(map);  //黒枠カラー塗り
-  var geoJsonOff   = new L.geoJson(japanJson, { style: style2, onEachFeature: onEachFeature2 }).addTo(map);  //黒枠透明
+  var geoJsonOn    = new L.geoJson(japanJson, { style: style,  onEachFeature: onEachFeature  });  //黒枠カラー塗り
+  var geoJsonOff   = new L.geoJson(japanJson, { style: style2, onEachFeature: onEachFeature2 });  //黒枠透明
   //レイヤーグループセット
   geoJsonGroup.addLayer(geoJsonOn);   //日本地図データ　カラー塗（都道府県クリックポップアップ表示付き）
   geoJsonGroup.addLayer(geoJsonOff);  //日本地図データ　透明塗（都道府県クリックポップアップ表示付き）
 
 
-  //県庁所在地マーカーレイヤーグループセット
+  //県庁所在地マーカーとポップアップ　レイヤーグループセット
   for (var i=0; i < prefJson.marker.length; i++){
     //マーカークリック時のポップアップ設定
-    var popup = L.popup().setContent( "<span style='font-size:40px'>"+"【<ruby>"+"県庁所在地"+"<rt>"+"けんちょうしょざいち"+"</rt>"+"</ruby>"+ "】<br>"+"</span>"+
-                                      "<span style='font-size:60px'>"+"<ruby>"+prefJson.marker[i].city+"<rt>"+prefJson.marker[i].cityyomi+"</rt>"+"</ruby>"+ "<br>"+"</span>",
-                                      {maxWidth:400});
-    var mk = L.marker( [prefJson.marker[i].lat, prefJson.marker[i].lng], { draggable: false }).bindPopup(popup).addTo(map);
+    if (popupFlg) {
+      var popup = L.popup().setContent( "<center><span style='font-size:40px'>"+"【<ruby>"+"県庁所在地"+"<rt>"+"けんちょうしょざいち"+"</rt>"+"</ruby>"+ "】<br>"+"</span>"+
+                                      "<span style='font-size:60px'>"+"<ruby>"+prefJson.marker[i].city+"<rt>"+prefJson.marker[i].cityyomi+"</rt>"+"</ruby>"+ "<br>"+"</span></center>",
+                                      {maxWidth:500});
+    }
+    var mk = L.marker( [prefJson.marker[i].lat, prefJson.marker[i].lng], { draggable: false }).bindPopup(popup);
     markerGroup.addLayer(mk);
   }
 
-  // 現在地マーカー
+  // 現在地マーカーとポップアップ
   var popup = L.popup().setContent("<span style='font-size:60px'>"+"<ruby>"+"現在地"+"<rt>"+"げんざいち"+"</rt>"+"</ruby>"+ "<br>"+"</span>");
-  var gpsMarker = L.marker( [lat, lng], { draggable: false, icon: closeIcon }).bindPopup(popup).addTo(map);
+  var gpsMarker = L.marker( [lat, lng], { draggable: false, icon: closeIcon }).bindPopup(popup);
   gpsGroup.addLayer(gpsMarker);       //gpsマーカーグループセット
 
   // 十字マークを地図中央に表示
-  var crossMarker = L.marker( map.getCenter(),{ icon:crossIcon, zIndexOffset:1000, interactive:false }).addTo(map);
-  crossGroup.addLayer(crossMarker);
+//  var crossMarker = L.marker( map.getCenter(),{ icon:crossIcon, zIndexOffset:10, interactive:false });
+//  crossGroup.addLayer(crossMarker);
 
   // コントローラーの選択追加
   var overlayLayerControls = {
-    "<span style='font-size:40px'>地方名別色</span>": geoJsonOn,
-    "<span style='font-size:40px'>選択時不透明</span>": geoJsonOff,
-    "<span style='font-size:40px'>現在地マーカー</span>": gpsGroup,
+    "<span style='font-size:40px'>地方名別色</span>":         geoJsonOn,
+    "<span style='font-size:40px'>選択時不透明</span>":       geoJsonOff,
+    "<span style='font-size:40px'>現在地マーカー</span>":     gpsGroup,
     "<span style='font-size:40px'>県庁所在地マーカー</span>": markerGroup,
-    "<span style='font-size:40px'>十字マーク</span>": crossGroup,
+//    "<span style='font-size:40px'>十字マーク</span>": crossGroup,
   };
 
   //グループ初期設定
-  geoJsonOn.addTo(map);     //地方名別色
-  geoJsonOff.addTo(map);    //選択時不透明
-  markerGroup.addTo(map);   //県庁所在地マーカー
-  gpsGroup.addTo(map);      //GPSマーカー
-  crossGroup.addTo(map);    //十字マーク
+  if (localnameFlg){
+    geoJsonOn.addTo(map);     //地方名別色
+  }
+  if (transparentFlg) {
+    geoJsonOff.addTo(map);    //選択時不透明
+  }
+  if (gpsmarkerFlg) {
+    gpsGroup.addTo(map);      //現在地マーカー
+  }
+  if (prefmarkerFlg) {
+    markerGroup.addTo(map);   //県庁所在地マーカー
+  }
+
+//  crossGroup.addTo(map);    //十字マーク
 
   //地図選択ボタン
-  L.control.layers(baseMaps, overlayLayerControls, { collapsed: true, }).addTo(map);
+  L.control.layers(baseMaps, overlayLayerControls, { collapsed: true,}).addTo(map);
 
+
+
+
+/*
+<!-- マップイベント -->
+var zoomLev = map.getZoom();
+
+//info01エリア
+var info01 = L.control({ position : 'bottomleft' });
+
+info01.addTo(map);
+
+info01.onAdd = function (map) {
+  this._div = L.DomUtil.create('div', 'info');
+  this.update();
+  return this._div;
+};
+
+info01.update = function (zoomLev,centerLatLng) {
+  zoomLev = map.getZoom();
+  centerLatLng = map.getCenter();
+  this._div.innerHTML = "<center>＜中心座標＞</center>" +
+        "Ｎ： " + Math.round(centerLatLng.lat * 100000)/100000 + "<br>" +
+        "Ｅ：" + Math.round(centerLatLng.lng * 100000)/100000 + "<br>" +
+         "Zoom Level：" + zoomLev;
+};
+
+//ズームエンド
+map.on("zoomend", function(){
+  info01.update(zoomLev);
+  info01.update(centerLatLng);
+})
+
+*/
 
   // 十字マークのGPS位置を表示する
   map.on('moveend', function(e) {
-    crossMarker.setLatLng(map.getCenter());
+//    info01.update(zoomLev);
+//    info01.update(centerLatLng);
+
     var mes = "lat: " + map.getCenter().lat + " lng: " + map.getCenter().lng;
     console.log(mes);
 
     if (window.Unity){
-      Unity.call(mes);   //Unityへ送信：ブラウザのエラーは無視
+      Unity.call(mes);   //Unityへ送信
     }
   });
-
-
-
 
 
   //読み込みエラー
@@ -214,10 +352,6 @@
     console.log("japanJsonが読み込めていない！！！");  //デバッグ表示
     //Unity.call("japanJsonが読み込めていない！！！");   //Unityへ送信：ブラウザのエラーは無視
   }
-
-
-
-
 
 
 //インタラクション
@@ -287,22 +421,26 @@
 
   //ON:クリック時の動作
   function onEachFeature(feature, layer) {
-    setInfo(feature, layer);
+    if (popupFlg){
+      setInfo(feature, layer);
+    }
 
     layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
+        mouseover:  highlightFeature,
+        mouseout:   resetHighlight,
+        click:      zoomToFeature
     });
   }
   //OFF:クリック時の動作
   function onEachFeature2(feature, layer) {
-    setInfo(feature, layer);
+    if (popupFlg){
+      setInfo(feature, layer);
+    }
 
     layer.on({
-        mouseover: highlightFeature2,
-        mouseout: resetHighlight2,
-        click: zoomToFeature
+        mouseover:  highlightFeature2,
+        mouseout:   resetHighlight2,
+        click:      zoomToFeature
     });
   }
 
@@ -323,24 +461,40 @@
       var lng        = prefJson.marker[i].lng;
 //      console.log("<span style='font-size:50px'>"+id +":"+pref+"</span>");
 
-      //地方名＋都道府県名　セット
-      layer.bindPopup ( "<span style='font-size:50px'>"+
+      //地方名＋都道府県名　ポップアップ　セット
+      layer.bindPopup ( "<center><span style='font-size:40px'>"+
                         "【<ruby>" + localGroup + "<rt>" + LGyomi + "</rt>" + "</ruby>" + "】<br>" +     //地方名＋ルビ
                         id + ":" + "<ruby>" + pref + "<rt>" + prefyomi + "</rt>" + "</ruby>" + "<br>" +  //都道府県＋ルビ
-                        "</span>"
+                        "</span></center>"
                       );
     }
   }
 
 
-  //Unityからロードされたjsデータが送られてくる
+// Unityから送信されてきた時の処理
+  if (window.Unity){
+    //Unityからロードされたjsデータが送られてくる
+    Unity.LoadJs = function(data){
+        console.log(data);
+    }
+  }
 //  window.addEventListener('DOMContentLoaded', function(){
 //    /** jQueryの処理 */
 //  });
 
-//  Unity.LoadJs = function(data){
-//      console.log(data);
-//  }
-
-
+  /**
+   * Get the URL parameter value
+   *
+   * @param  name {string} パラメータのキー文字列
+   * @return  url {url} 対象のURL文字列（任意）
+   */
+  function getParam(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
 </script>
