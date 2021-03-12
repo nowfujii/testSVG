@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Leaflet日本地図</title>
+  </head>
+
+<!-- leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<!-- ICON plugin -->
+  <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+  <!--<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">-->
+
+<!-- easy button-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+<!-- 日本地図GeoJson/　都道府県データpref-->
+  <link rel="stylesheet" href="index2.css">
+  <!--<link rel="stylesheet" href="https://nowfujii.github.io/testSVG/index2.css">-->
+  <script src="index2.js"></script>
+  <!--このローカルファイルは読み込んでくれてる？？あ！htmlファイルと同じ名前の時いけてる！ので、.jsはここに統合した-->
+  <!--<script src="https://nowfujii.github.io/testSVG/index2.js"></script>-->
+  <!--  <script src="pref.js" ></script> ローカルファイルを読み込んでくれない-->
+  <!--<script src="https://nowfujii.github.io/testSVG/pref.js"></script>-->
+
+  <body>
+    <!--背景色用-->
+    <div id="nuri"></div>
+    <!--地図用-->
+    <div id="map">
+    <!--十字マーク-->
+      <div id="cross">
+        <IMG id="_cross" src="https://maps.gsi.go.jp/image/map/crosshairs.png" style="visibility: visilbe">  <!--visilbe / hidden-->
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
+<script type="text/javascript">
+// Create the map
+var map = L.map('map').setView([41, -98], 5);
+
+//when map is clicked run identify
+map.on('click', identify);
+
+// Identify function
+function identify(e) {
+    alert('click on the map');
+};
+
+//example geojson
+var states = [{
+    "type": "Feature",
+    "properties": {"party": "Republican"},
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+            [-104.05, 48.99],
+            [-97.22,  48.98],
+            [-96.58,  45.94],
+            [-104.03, 45.94],
+            [-104.05, 48.99]
+        ]]
+    }
+}, {
+    "type": "Feature",
+    "properties": {"party": "Democrat"},
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+            [-109.05, 41.00],
+            [-102.06, 40.99],
+            [-102.03, 36.99],
+            [-109.04, 36.99],
+            [-109.05, 41.00]
+        ]]
+    }
+}];
+
+//style the polygon with clickedgeojson function
+parpoly = L.geoJson(states, {
+    style: {
+    color: '#ff7800',
+    weight: 1.5,
+    opacity: 1,
+    fillOpacity: 0
+   },
+   onEachFeature: function(feature, layer) {
+    layer.on({
+        click: clickedgeojson
+     });
+    }
+});
+
+//clickedgeojson function
+function clickedgeojson(e) {
+    L.DomEvent.stopPropagation(e);
+    alert('click on json');
+};
+
+// Set up the OSM layer
+L.tileLayer(
+    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {maxZoom: 18}).addTo(map);
+
+//add the geojson to map
+parpoly.addTo(map);
+
+</script>

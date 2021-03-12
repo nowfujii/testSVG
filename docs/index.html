@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-git.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <title>SS開発室：【Web版:漢字学習システム】手書き入力：Google InputAPI テスト</title>
+    <meta http-equiv="content-type" charset="utf-8">
+    <style>
+      body { background: #eee; }
+      #canvas-container{
+        position: relative;
+        height: 0;
+        overflow: hidden;
+        padding-top: 100%;    <!-- 56.25% 横長サイズにしていた時のやつ-->
+      }
+      #canvas {
+        margin: 0px;
+        background: #ffffff;
+        border: 1px solid #aaaaaa;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 99.5%;
+        height: 99.5%;
+      }
+      input[type="image"]{
+        padding: 2px;
+        outline: none;
+      }
+      input[type="image"].active{
+        background-color: #fff;
+      }
+      canvas {
+        border: 1px solid silver;
+      }
+     </style>
+  </head>
+
+  <body>
+    <div aligin="center">
+      <!-- スクリーンサイズ、ウィンドウサイズ、キャンバスサイズ、コンテナサイズ：必要な時は hidden=""を削除する-->
+      <font size="15">
+        <span id="ScrSize" hidden="" ></span> <span id="WinSize" hidden="" ></span>
+        <span id="CanSize" hidden="" ></span> <span id="ConSize" hidden="" ></span>
+      </font>
+
+      <!-- キャンバス-->
+      <div id="canvas-container"><canvas id="canvas" >残念ながらHTML5に対応していません</canvas></div>
+      <input id="color" type="color" hidden="">
+      <input id="width" type="number" min="4" max="10" hidden="">
+      <button id="ajax" hidden>送信</button>
+
+      <font size="10">
+        <!-- Unityへ転送ボタン -->
+        <input type="submit" value="Unityへ転送" onclick="Unity.call(document.getElementById('id_answer').value); return false;" style="font-size : 150%;" hidden="" />
+
+        <!-- 選択した文字列テキスト-->
+        <input type="text" class="form-control" name="answer" id="id_answer" value="" size="10" maxlength="10" style="font-size : 150%;"/>
+
+        <!-- クリアボタン-->
+        <input type="button" id="del_canvas" value="クリア" onclick="window.del_canvas()"  style="text-align: right; font-size : 150%;" />
+
+        <!-- 漢字候補ボタン-->
+        <div id="KOUHO"></div>
+        <input type="button" id="KOUHO0" value="　" onClick="funcUnity(data2[0])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO1" value="　" onClick="funcUnity(data2[1])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO2" value="　" onClick="funcUnity(data2[2])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO3" value="　" onClick="funcUnity(data2[3])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO4" value="　" onClick="funcUnity(data2[4])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO5" value="　" onClick="funcUnity(data2[5])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO6" value="　" onClick="funcUnity(data2[6])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO7" value="　" onClick="funcUnity(data2[7])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO8" value="　" onClick="funcUnity(data2[8])" style="font-size : 150%;" />
+        <input type="button" id="KOUHO9" value="　" onClick="funcUnity(data2[9])" style="font-size : 150%;" />
+<!--        <input type="button" id="KOUHO9" value="　" onClick="funcKOUHO9()" hidden="">-->
+        <script src="index.js"></script>
+      </font>
+
+    </div>
+  </body>
+</html>
