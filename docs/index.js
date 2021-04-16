@@ -13,17 +13,18 @@ var text = {
   'device' : window.navigator.userAgent,
   'input_type' : 0,               // ?
   'options' : 'enable_pre_space', // ?
-  'requests' : [ {
+  'requests' : [{
     'writing_guide' : {
       'writing_area_width' : 250, // canvas width
       'writing_area_height' : 250,// canvas height
     },
     'pre_context' : '',           // confirmed preceding chars
-    'max_num_results' : 1,
+    'max_num_results' : 20,
     'max_completions' : 0,
+    'language': 'ja',
     //ストロークデータ構造 [x1,x2,x3],[y1,y2,y3],[開始時間、終了時間], //１画づつに区切られた連続データ
     'ink' : []
-  } ]
+  }]
 };
 
 //--------------------------------------------------------------------
@@ -397,8 +398,10 @@ window.onresize = function(){
 }
 
 function funcUnity(v) {
-  var value = document.getElementById( "id_answer" ).value = v;
-  Unity.call(value);
+  if (Window.Unity){
+    var value = document.getElementById( "id_answer" ).value = v;
+    Unity.call(value);
+  }
   return false;
 }
 
@@ -424,6 +427,7 @@ function ajaxCall() {
       data :        JSON.stringify(text),
       dataType :    'json',
     })
+
 
     // Ajaxリクエストが成功した時発動
     .done( (data) => {
@@ -457,6 +461,8 @@ function ajaxCall() {
       $('.result').html(data);
       //document.getElementById( "Unity" ).value =  data2[0];
       console.log(data2[0]);
-      Unity.call(data2[0]);
+      if (Window.Unity) Unity.call(data2[0]);
+      var jsn = JSON.stringify(text);
+      console.log(JSON.stringify(text));
     });
 }

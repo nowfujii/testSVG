@@ -30,6 +30,31 @@
     width:                        100px;         /**/
     height:                       100px;        /**/
   }
+  /*県庁所在地マーク*/
+  .divicon1{
+    color:                        red;
+    font-size:                    36px;
+  }
+  /*GPSマーク*/
+  .divicon2{
+    color:                        blue;
+    font-size:                    48px;
+  }
+  /*首都マーク*/
+  .divicon3{
+    color:                        purple;
+    font-size:                    24px;
+  }
+  /*役場マーク*/
+  .divicon4{
+    color:                        red;
+    font-size:                    48px;
+  }
+  /*政令指定都市マーク*/
+  .divicon5{
+    color:                        green;
+    font-size:                    36px;
+  }
 
   /*leafret.cssをオーバーライド*/
   .leaflet-background-pane {
